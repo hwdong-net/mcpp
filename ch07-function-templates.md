@@ -20,6 +20,8 @@ void swap(std::string& a, std::string& b) { std::string t = a; a = b; b = t; }
 这不仅冗长，而且难以维护。**函数模板** 允许你只写一次，让编译器根据实际类型自动生成对应版本：
 
 ```cpp
+#include <print>
+
 template <typename T>
 void swap(T& a, T& b) {
     T temp = a;
@@ -32,6 +34,8 @@ int main() {
     swap(x, y);              // 编译器生成 int 版本
     double a = 1.5, b = 2.5;
     swap(a, b);              // 编译器生成 double 版本
+    std::println("x = {}, y = {}", x, y);
+    std::println("a = {}, b = {}", a, b);
 }
 ```
 
@@ -46,11 +50,13 @@ int main() {
 除了类型，模板还可以接受编译期常量值。例如，编写一个函数，重复打印某个值 `N` 次：
 
 ```cpp
+#include <print>
+
 template <int N, typename T>
 void repeat_print(T value) {
     for (int i = 0; i < N; ++i)
-        std::cout << value << ' ';
-    std::cout << '\n';
+        std::print("{} ", value);
+    std::println("");
 }
 
 int main() {
@@ -62,6 +68,8 @@ int main() {
 `N` 在编译期就确定了，不会有运行时开销。你甚至可以让编译器自动推导数组大小：
 
 ```cpp
+#include <print>
+
 template <typename T, int N>
 T sum(const T (&arr)[N]) {      // 数组引用，N 自动推导为数组长度
     T total{};
@@ -71,7 +79,7 @@ T sum(const T (&arr)[N]) {      // 数组引用，N 自动推导为数组长度
 
 int main() {
     int arr[] = {1, 2, 3, 4, 5};
-    std::cout << sum(arr);      // 输出 15，N 自动推导为 5
+    std::println("{}", sum(arr));      // 输出 15，N 自动推导为 5
 }
 ```
 
@@ -86,10 +94,12 @@ int main() {
 **示例：打印任意多个任意类型的值（C++17 折叠表达式）**
 
 ```cpp
+#include <print>
+
 template <typename... Args>
 void print_all(Args... args) {
-    ((std::cout << args << ' '), ...);   // 逗号折叠
-    std::cout << '\n';
+    ((std::print("{} ", args)), ...);   // 逗号折叠
+    std::println("");
 }
 
 int main() {
@@ -100,28 +110,37 @@ int main() {
 **示例：求和（折叠表达式）**
 
 ```cpp
+#include <print>
+
 template <typename... Args>
 auto sum(Args... args) {
     return (args + ... + 0);   // 二元右折叠，空包时返回 0
 }
 
 int main() {
-    std::cout << sum(1, 2, 3, 4);        // 10
-    std::cout << sum(1, 2.5, 3);         // 6.5（混合类型自动推导）
+    std::println("{}", sum(1, 2, 3, 4));        // 10
+    std::println("{}", sum(1, 2.5, 3));         // 6.5（混合类型自动推导）
 }
 ```
 
 **示例：递归模板处理（C++11 经典方式）**
 
 ```cpp
+#include <print>
+
 // 基情形
 void print() {}
 
 // 递归情形：处理第一个参数，再递归处理剩余
 template <typename T, typename... Rest>
 void print(T first, Rest... rest) {
-    std::cout << first << ' ';
+    std::print("{} ", first);
     print(rest...);
+}
+
+int main() {
+    print(1, 2.5, "hello", 'x');
+    std::println("");
 }
 ```
 
@@ -134,6 +153,9 @@ void print(T first, Rest... rest) {
 通用模板适用于大多数类型，但有时某些类型需要特殊处理。例如，比较 C 风格字符串时，我们希望比较内容而不是指针地址：
 
 ```cpp
+#include <print>
+#include <cstring>
+
 // 通用模板
 template <typename T>
 bool is_equal(T a, T b) {
@@ -149,7 +171,7 @@ bool is_equal<const char*>(const char* a, const char* b) {
 int main() {
     const char* s1 = "hello";
     const char* s2 = "hello";
-    std::cout << is_equal(s1, s2);   // 调用特化版本，输出 1（真）
+    std::println("{}", is_equal(s1, s2));   // 调用特化版本，输出 true
 }
 ```
 
@@ -162,6 +184,9 @@ int main() {
 当你需要编写一个函数，它能够保持容器类型但改变元素类型时，就需要模板模板参数。例如，将 `vector<int>` 转换为 `vector<double>`，同时保持容器类型为 `vector`：
 
 ```cpp
+#include <vector>
+#include <print>
+
 template <template <typename...> class Container, typename T>
 Container<double> convertToDouble(const Container<T>& src) {
     Container<double> dst;
@@ -173,6 +198,8 @@ Container<double> convertToDouble(const Container<T>& src) {
 int main() {
     std::vector<int> vi = {1, 2, 3};
     auto vd = convertToDouble(vi);   // vd 类型为 std::vector<double>
+    for (double d : vd) std::print("{} ", d);
+    std::println("");
 }
 ```
 
@@ -190,7 +217,7 @@ int main() {
 - `print_all`：打印任意多个任意类型的值（逗号折叠）
 
 ```cpp
-#include <iostream>
+#include <print>
 #include <algorithm>
 
 // 最大值（递归）
@@ -213,14 +240,14 @@ double average(Args... args) {
 // 打印（逗号折叠）
 template <typename... Args>
 void print_all(Args... args) {
-    ((std::cout << args << ' '), ...);
-    std::cout << '\n';
+    ((std::print("{} ", args)), ...);
+    std::println("");
 }
 
 int main() {
-    std::cout << max_value(3, 7, 2, 9) << '\n';    // 9
-    std::cout << average(1, 2, 3, 4) << '\n';      // 2.5
-    print_all(1, 2.5, "hello", 'x');               // 1 2.5 hello x
+    std::println("max = {}", max_value(3, 7, 2, 9));    // 9
+    std::println("avg = {}", average(1, 2, 3, 4));      // 2.5
+    print_all(1, 2.5, "hello", 'x');                    // 1 2.5 hello x
 }
 ```
 
