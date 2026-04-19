@@ -3,10 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>AI 基础教程</title>
-  <!-- docsify 默认主题（干净、适合文档） -->
+  <title>现代C++编程实战 - 从入门到应用</title>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/lib/themes/vue.css">
-  <!-- 可选：代码高亮样式 -->
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.css">
 </head>
 <body>
@@ -14,78 +12,60 @@
 
   <script>
     window.$docsify = {
-      // ========== 核心配置 ==========
-      name: 'AI 基础教程',            // 侧边栏顶部显示的标题
-      repo: '',                      // 如果填写 GitHub 仓库地址，会显示一个 GitHub 角标
-      loadSidebar: true,             // 开启侧边栏（必须）
-      subMaxLevel: 2,                // 侧边栏目录显示的层级（h1, h2）
-      auto2top: true,                // 切换页面时自动滚动到顶部
-      
-      // ========== 侧边栏行为 ==========
-      sidebarDisplayLevel: 1,        // 默认展开一级目录
-      relativePath: true,            // 使用相对路径（推荐，避免子路径部署时资源丢失）
-      
-      // ========== 搜索（可选） ==========
+      name: '现代C++编程实战',
+      repo: '',
+      loadSidebar: true,
+      coverpage: true,                 // 开启启动封面
+      subMaxLevel: 2,
+      auto2top: true,
+      sidebarDisplayLevel: 1,
+      relativePath: true,
       search: {
-        maxAge: 86400000,            // 缓存时间（一天）
-        paths: 'auto',               // 自动搜索所有 markdown 页面
-        placeholder: '搜索...',
-        noData: '没有找到相关内容'
+        maxAge: 86400000,
+        paths: 'auto',
+        placeholder: '搜索章节...',
+        noData: '未找到相关内容'
       },
-      
-      // ========== 复制代码按钮 ==========
       copyCode: {
-        buttonText: '复制',
+        buttonText: '复制代码',
         successText: '已复制'
       },
-      
-      // ========== 分页导航（上一页/下一页） ==========
       pagination: {
         previousText: '上一章',
         nextText: '下一章',
-        crossChapter: true,
-        crossChapterText: true
-      },
-      
-      // ========== 封面（如果有需要可取消注释） ==========
-      // coverpage: true,
-      
-      // ========== 自定义侧边栏标题等 ==========
-      alias: {
-        // 如果有多级目录，可以配置别名（这里暂时不需要）
+        crossChapter: true
       }
     }
   </script>
 
-  <!-- docsify 核心库 -->
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
-  
-  <!-- 可选插件：搜索、复制代码、分页导航（需要额外加载） -->
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
-  
-  <!-- 代码高亮（Prism） -->
   <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-cpp.min.js"></script>
-  
-  <!-- 可选：移动端适配优化 -->
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+
   <style>
-    /* 让侧边栏在小屏幕上也能正常显示 */
     @media (max-width: 768px) {
-      .sidebar {
-        padding-top: 60px;
-      }
-      .content {
-        padding: 20px;
-      }
+      .sidebar { padding-top: 60px; }
+      .content { padding: 20px; }
     }
-    /* 美化代码块 */
-    pre[data-lang] {
-      border-radius: 8px;
+    pre[data-lang] { border-radius: 8px; }
+    .markdown-section h1 { border-bottom: 2px solid #42b983; padding-bottom: 10px; }
+    
+    /* 让侧边栏卡片固定在底部（可选） */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+    }
+    .sidebar > div:last-child {
+      margin-top: auto;
+      padding-bottom: 20px;
     }
   </style>
 </body>
